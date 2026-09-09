@@ -1,0 +1,34 @@
+{
+  "name": "acme-school",
+  "version": "1.0.0",
+  "description": "Proyecto para la gestion de una escuela, como repaso para llevarlo a una futura conexion con mysql, y peticiones",
+  "keywords": [
+    "acme",
+    "school",
+    "readline",
+    "database",
+    "api"
+  ],
+  "homepage": "https://github.com/Anderson-Oloroso/acme-school#readme",
+  "bugs": {
+    "url": "https://github.com/Anderson-Oloroso/acme-school/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anderson-Oloroso/acme-school.git"
+  },
+  "license": "ISC",
+  "author": "Anderson-Oloroso",
+  "type": "commonjs",
+  "main": "src/app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production node src/app.js",
+    "dev": "NODE_ENV=development nodemon src/app.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
