@@ -7,7 +7,7 @@ class IdentificationType{
     }
 
     getIdtypes(){
-        return`Código: ${thiscode} - Nombre: ${this.name} - Descripción: ${this.description}`
+        return`Código: ${this.code} - Nombre: ${this.name} - Descripción: ${this.description}`
     }
 }
 
@@ -111,3 +111,15 @@ class Topic{
         this.active = active;
     }
 }
+
+class Connection{
+    static open(){
+        return  console.log(`[CONNECTION] -> Openning connection ...`);
+    }
+    
+    static close(){
+        return console.log(`[CONNECTION] -> Closing connection ...`);
+    }
+}
+
+Connection.close();
