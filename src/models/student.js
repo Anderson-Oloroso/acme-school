@@ -10,6 +10,9 @@ class Student extends Person{
         this.cityId = cityId;
     }
 
+    getInfo() {
+    return `${super.getInfo()} | Genero: ${this.gender} | Cumpleaños: ${this.birthday} | Dirección: ${this.address} | Ciudad ID: ${this.cityId}`;
+    }
 }
 
 module.exports = Student;

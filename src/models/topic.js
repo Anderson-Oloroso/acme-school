@@ -1,5 +1,5 @@
 class Topic{
-    constructor(id = null,courseId, code, title, description, active){
+    constructor(id = null, courseId, code, title, description, active){
         this.id = id;
         this.courseId = courseId;
         this.code = code;

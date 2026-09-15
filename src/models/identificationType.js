@@ -1,5 +1,5 @@
 class IdentificationType{
-    constructor(id = null,code, name, description){
+    constructor(id = null, code, name, description){
         this.id = id;
         this.code = code;
         this.name = name;
