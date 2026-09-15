@@ -9,4 +9,4 @@ class Topic{
     }
 }
 
-module.exports == { Topic };
+module.exports = Topic;

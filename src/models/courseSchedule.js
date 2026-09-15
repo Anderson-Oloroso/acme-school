@@ -10,4 +10,4 @@ class CourseSchedule{
     }
 }
 
-module.exports == { CourseSchedule };
+module.exports = CourseSchedule ;

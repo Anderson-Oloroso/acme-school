@@ -8,4 +8,4 @@ class Classroom{
     }
 }
 
-module.exports == { Classroom };
+module.exports = Classroom;

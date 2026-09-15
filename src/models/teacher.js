@@ -7,4 +7,4 @@ class Teacher extends Person{
 }
 
 
-module.exports == { Teacher };
+module.exports = Teacher;

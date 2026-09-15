@@ -12,4 +12,4 @@ class Student extends Person{
 
 }
 
-module.exports = { Student };
+module.exports = Student;

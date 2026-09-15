@@ -7,4 +7,4 @@ class Rate{
     }
 }
 
-module.exports == { Rate };
+module.exports = Rate;
