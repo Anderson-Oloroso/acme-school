@@ -9,4 +9,4 @@ class Topic{
     }
 }
 
-module.exports = Topic;
+export default Topic;

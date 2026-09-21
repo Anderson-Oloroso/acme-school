@@ -1,4 +1,4 @@
-const Person = require('./person.js');
+import Person from './person.js';
 
 class Student extends Person{
     constructor(id = null, code, firstName, lastName, idtTypeId, identificationNumber, gender, birthday, email, address, cityId){
@@ -15,4 +15,4 @@ class Student extends Person{
     }
 }
 
-module.exports = Student;
+export default Student;

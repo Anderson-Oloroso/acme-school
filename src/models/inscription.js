@@ -8,4 +8,4 @@ class Inscription{
     }
 }
 
-module.exports = Inscription;
+export default Inscription;

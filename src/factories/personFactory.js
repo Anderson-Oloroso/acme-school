@@ -1,5 +1,5 @@
-const Student = require('../models/student.js');
-const Teacher = require('../models/teacher.js');
+import Student from '../models/student.js';
+import Teacher from '../models/teacher.js';
 
 class PersonFactory{
     static createPerson(type, data){
@@ -23,4 +23,4 @@ class PersonFactory{
     }
 }
 
-module.exports = PersonFactory;
+export default PersonFactory;

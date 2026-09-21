@@ -10,4 +10,4 @@ class CourseSchedule{
     }
 }
 
-module.exports = CourseSchedule ;
+export default CourseSchedule;

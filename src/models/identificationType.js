@@ -11,4 +11,4 @@ class IdentificationType{
     }
 }
 
-module.exports = IdentificationType ;
+export default IdentificationType;
