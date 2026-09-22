@@ -1,142 +1,133 @@
-CREATE DATABASE IF NOT EXISTS acme_school;
-CHARACTER SET utf8mb4 
+DROP DATABASE IF EXISTS acme_school;
+CREATE DATABASE IF NOT EXISTS acme_school
+CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 
 USE acme_school;
 
--- -----------------------------------------------------
--- 1. Tablas independientes (Catalogos)
--- -----------------------------------------------------
-
-CREATE TABLE identification_types (
+CREATE TABLE IF NOT EXISTS identification_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(6),
-    name VARCHAR(100),
+    code VARCHAR(6) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL,
     description VARCHAR(250)
 ) ENGINE=InnoDB;
 
-CREATE TABLE cities (
+CREATE TABLE IF NOT EXISTS cities (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(10),
-    name VARCHAR(100)
+    code VARCHAR(10) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL
 ) ENGINE=InnoDB;
 
-CREATE TABLE classrooms (
+CREATE TABLE IF NOT EXISTS classrooms (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(10),
+    code VARCHAR(10) NOT NULL UNIQUE,
     description VARCHAR(250),
-    capacity INT,
-    active TINYINT
+    capacity INT NOT NULL,
+    active TINYINT DEFAULT 1
 ) ENGINE=InnoDB;
 
-CREATE TABLE courses (
+CREATE TABLE IF NOT EXISTS courses (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(10),
-    description VARCHAR(250),
-    intensity INT,
-    weight INT,
-    active TINYINT
+    code VARCHAR(10) NOT NULL UNIQUE,
+    description VARCHAR(250) NOT NULL,
+    intensity INT NOT NULL,
+    weight INT NOT NULL,
+    active TINYINT DEFAULT 1
 ) ENGINE=InnoDB;
 
--- -----------------------------------------------------
--- 2. Tablas dependientes de nivel 1
--- -----------------------------------------------------
-
-CREATE TABLE teachers (
+CREATE TABLE IF NOT EXISTS teachers (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    firstName VARCHAR(60),
-    lastName VARCHAR(60),
-    identification_type_id INT,
-    identificationNumber VARCHAR(16),
-    email VARCHAR(100),
-    CONSTRAINT fk_teachers_identification_types 
-        FOREIGN KEY (identification_type_id) REFERENCES identification_types(id) 
-        ON DELETE RESTRICT ON UPDATE CASCADE
+    first_name VARCHAR(60) NOT NULL,
+    last_name VARCHAR(60) NOT NULL,
+    identification_type_id INT NOT NULL,
+    identification_number VARCHAR(20) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    FOREIGN KEY (identification_type_id)
+        REFERENCES identification_types(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE students (
+CREATE TABLE IF NOT EXISTS students (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(14),
-    firstName VARCHAR(60),
-    lastName VARCHAR(60),
-    identification_type_id INT,
-    identificationNumber VARCHAR(16),
+    code VARCHAR(14) NOT NULL UNIQUE,
+    first_name VARCHAR(60) NOT NULL,
+    last_name VARCHAR(60) NOT NULL,
+    identification_type_id INT NOT NULL,
+    identification_number VARCHAR(20) NOT NULL UNIQUE,
     gender VARCHAR(20),
     birthdate DATETIME,
-    email VARCHAR(60),
+    email VARCHAR(100) NOT NULL UNIQUE,
     address VARCHAR(100),
-    city_id BIGINT,
-    CONSTRAINT fk_students_identification_types 
-        FOREIGN KEY (identification_type_id) REFERENCES identification_types(id) 
-        ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_students_cities 
-        FOREIGN KEY (city_id) REFERENCES cities(id) 
-        ON DELETE RESTRICT ON UPDATE CASCADE
+    city_id BIGINT NOT NULL,
+    FOREIGN KEY (identification_type_id)
+        REFERENCES identification_types(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+    FOREIGN KEY (city_id)
+        REFERENCES cities(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE topics (
+CREATE TABLE IF NOT EXISTS topics (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    course_id BIGINT,
-    code VARCHAR(10),
-    title VARCHAR(100),
+    course_id BIGINT NOT NULL,
+    code VARCHAR(10) NOT NULL,
+    title VARCHAR(100) NOT NULL,
     description VARCHAR(250),
-    active TINYINT,
-    CONSTRAINT fk_topics_courses 
-        FOREIGN KEY (course_id) REFERENCES courses(id) 
-        ON DELETE RESTRICT ON UPDATE CASCADE
+    active TINYINT DEFAULT 1,
+    FOREIGN KEY (course_id)
+        REFERENCES courses(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
--- -----------------------------------------------------
--- 3. Tablas dependientes de nivel 2
--- -----------------------------------------------------
-
-CREATE TABLE courses_schedules (
+CREATE TABLE IF NOT EXISTS courses_schedules (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    course_id BIGINT,
-    teacher_id BIGINT,
-    classroom_id INT,
-    start_date DATETIME,
-    end_date DATETIME,
-    active TINYINT,
-    CONSTRAINT fk_schedules_courses 
-        FOREIGN KEY (course_id) REFERENCES courses(id) 
-        ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_schedules_teachers 
-        FOREIGN KEY (teacher_id) REFERENCES teachers(id) 
-        ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_schedules_classrooms 
-        FOREIGN KEY (classroom_id) REFERENCES classrooms(id) 
-        ON DELETE RESTRICT ON UPDATE CASCADE
+    course_id BIGINT NOT NULL,
+    teacher_id BIGINT NOT NULL,
+    classroom_id INT NOT NULL,
+    start_date DATETIME NOT NULL,
+    end_date DATETIME NOT NULL,
+    active TINYINT DEFAULT 1,
+    FOREIGN KEY (course_id)
+        REFERENCES courses(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+    FOREIGN KEY (teacher_id)
+        REFERENCES teachers(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+    FOREIGN KEY (classroom_id)
+        REFERENCES classrooms(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
--- -----------------------------------------------------
--- 4. Tablas dependientes de nivel 3
--- -----------------------------------------------------
-
-CREATE TABLE inscriptions (
+CREATE TABLE IF NOT EXISTS inscriptions (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    course_schedule BIGINT,
-    student_id BIGINT,
-    register_date DATETIME,
-    active TINYINT,
-    CONSTRAINT fk_inscriptions_courses_schedules 
-        FOREIGN KEY (course_schedule) REFERENCES courses_schedules(id) 
-        ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_inscriptions_students 
-        FOREIGN KEY (student_id) REFERENCES students(id) 
-        ON DELETE RESTRICT ON UPDATE CASCADE
+    course_schedule_id BIGINT NOT NULL,
+    student_id BIGINT NOT NULL,
+    register_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    active TINYINT DEFAULT 1,
+    FOREIGN KEY (course_schedule_id)
+        REFERENCES courses_schedules(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+    FOREIGN KEY (student_id)
+        REFERENCES students(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
--- -----------------------------------------------------
--- 5. Tablas dependientes de nivel 4
--- -----------------------------------------------------
-
-CREATE TABLE rates (
+CREATE TABLE IF NOT EXISTS rates (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    inscription_id BIGINT,
-    rate BIGINT,
+    inscription_id BIGINT NOT NULL,
+    rate DECIMAL(5,2) NOT NULL,
     comments VARCHAR(250),
-    CONSTRAINT fk_rates_inscriptions 
-        FOREIGN KEY (inscription_id) REFERENCES inscriptions(id) 
-        ON DELETE RESTRICT ON UPDATE CASCADE
+    FOREIGN KEY (inscription_id)
+        REFERENCES inscriptions(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 ) ENGINE=InnoDB;
